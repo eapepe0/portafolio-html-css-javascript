@@ -1,11 +1,16 @@
+/* 
+    CARGAMOS MUURI PARA MANEJAR LAS IMAGENES Y FORMAR UN GRID 
+*/
 const grid = new Muuri('.grid',{
     layout:{
         rounding: false
     }    
 });
-
+/* 
+    AGREGAMOS UN LISTENER AL CARGAR LA PAGINA 
+*/
 window.addEventListener('load',() => {
-    grid.refreshItems().layout();
+    grid.refreshItems().layout(); /* al cargar se refrescan los items del layout */
     document.getElementById('grid').classList.add('imagenes-cargadas'); /* cuando carga todas las imagenes recien las muestra */
     const enlaces = document.querySelectorAll('#categorias a'); /* ponemos en una constante  los links con el id categorias */
     enlaces.forEach((elemento) => { /* un for por cada elemento */
@@ -22,29 +27,39 @@ window.addEventListener('load',() => {
 
         });
     });
+    /* 
+        FILTRAR BARRA BUSQUEDA 
+    */
     document.querySelector('#barra-busqueda').addEventListener('input', (evento) => { /* elegimos el id barra-busqueda y le agregamos un evento input */
         const busqueda = evento.target.value; /* por cada letra ingresada en la barra se almacena en la const busqueda */
         grid.filter((item) => item.getElement().dataset.etiquetas.includes(busqueda)); /* se filtra cada letra que este en el dataset que seria data-etiquetas que incluya la busqueda */
     });
-    /* LISTENER IMAGENES */
-    const overlay = document.getElementById('overlay');
-    document.querySelectorAll('.grid .item img').forEach( (elemento) => {
-        elemento.addEventListener('click', () => {
-            const ruta = elemento.getAttribute('src');
-            const descripcion = elemento.parentNode.parentNode.dataset.descripcion;
-            overlay.classList.add('activo');
-           document.querySelector('#overlay img').src = ruta;
-           document.querySelector('#overlay .descripcion').innerHTML = descripcion;
+    /* 
+        LISTENER IMAGENES
+     */
+    const overlay = document.getElementById('overlay'); /* obtengo el overlay */
+    document.querySelectorAll('.grid .item img').forEach( (elemento) => { /* busco adentro de la clase grid en el item todas las img */
+        elemento.addEventListener('click', () => { /* a cada una le agrego un evento click */
+            const ruta = elemento.getAttribute('src'); /* saco de cada elemento img la src */
+            const descripcion = elemento.parentNode.parentNode.dataset.descripcion; /* saco la descripcion de la imagen el padre y a su vez el padre busco en el dataset la descripcion */
+            overlay.classList.add('activo'); /* le agrego al overlay la clase activo */
+           document.querySelector('#overlay img').src = ruta; /* le cargo al overlay la ruta de la imagen que se hizo click */
+           document.querySelector('#overlay .descripcion').innerHTML = descripcion; /* le cargo al overlay la descripcion */
      });
     });
 
-    /* EVENT LISTENER CERRAR */
-    document.querySelector('#btn-cerrar-popup').addEventListener('click',() =>{
-        overlay.classList.remove('activo');
+    /*
+        EVENT LISTENER CERRAR
+    */
+
+    document.querySelector('#btn-cerrar-popup').addEventListener('click',() =>{ /* genero un evento click en el boton cerrar popup */
+        overlay.classList.remove('activo'); /* le remuevo la clase activo */
     });
 
-       /* EVENT LISTENER overlay CERRAR */
-       overlay.addEventListener('click',(evento) =>{
-        evento.target.id === 'overlay' ? overlay.classList.remove('activo') : '';
+    /* 
+       EVENT LISTENER overlay CERRAR
+    */
+       overlay.addEventListener('click',(evento) =>{ /* genero un event listener click en el overlay */
+        evento.target.id === 'overlay' ? overlay.classList.remove('activo') : ''; /* si el id clickeado es "overlay" remuevo la clase activo de lo contrario no hago nada */
     });
 });
